@@ -26,7 +26,7 @@ def decimate_mesh(file_name, output_name, reduction, filetype="vtk"):
         object = vtk.vtkPLYReader()
     if file_name[-3:] == 'stl':
         object = vtk.vtkSTLReader()
-    object.SetFileName(file_name)
+#    object.SetFileName(output_name)
     
     deci = vtk.vtkDecimatePro()
     deci.SetInputConnection(object.GetOutputPort())
