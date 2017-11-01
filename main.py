@@ -26,7 +26,7 @@ def decimate_mesh(file_name, output_name, reduction, filetype="vtk"):
         object = vtk.vtkPLYReader()
     if file_name[-3:] == 'stl':
         object = vtk.vtkSTLReader()
-    object.SetFileName(output_name)
+#    object.SetFileName(output_name)
     
     deci = vtk.vtkDecimatePro()
     deci.SetInputConnection(object.GetOutputPort())
@@ -62,7 +62,7 @@ def decimate_mesh(file_name, output_name, reduction, filetype="vtk"):
 
 
 filetype = config["filetype"]
-for file in glob.glob(config["surfdir"]):
+for file in glob.glob(config["surfdir"] + '/*'+filetype):
     print(os.path.basename(file))
     if os.path.basename(file) != 'color':
         print(file)
