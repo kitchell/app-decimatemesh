@@ -63,9 +63,7 @@ def decimate_mesh(file_name, output_name, reduction, filetype="vtk"):
 
 filetype = config["filetype"]
 for file in glob.glob(config["surfdir"] + '/*'+filetype):
-    print(os.path.basename(file))
-    if os.path.basename(file) != 'color':
-        print(file)
-        output_name = os.path.basename(file)
-        output_name = output_name + '.' + filetype
-        decimate_mesh(file, 'surfaces/'+output_name, config['reduction'], filetype)
+    print(file)
+    output_name = os.path.basename(file)[:-3]
+    output_name = output_name + filetype
+    decimate_mesh(file, 'surfaces/'+output_name, config['reduction'], filetype)
