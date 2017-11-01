@@ -15,7 +15,7 @@ if [ $ENV == "IUHPC" ]; then
 	fi	
 fi
 
-source activate dipyenv
+source activate mindboggle
 
 rm -rf surfaces
 
