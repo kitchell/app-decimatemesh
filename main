@@ -1,32 +1,35 @@
 #!/bin/bash
-#PBS -l nodes=1:ppn=8:dc2,walltime=0:25:00
+#PBS -l nodes=1:ppn=8,walltime=0:25:00
 #PBS -N app-decimatemesh
 #PBS -V
 
 
 
-if [ $ENV == "IUHPC" ]; then
-	module unload python
-	if [ $HPC == "KARST" ]; then
-		module load anaconda2
-	fi
-	if [ $HPC == "CARBONATE" ]; then
-		module load anaconda/python2.7/4.3.1
-	fi	
-fi
+#if [ $ENV == "IUHPC" ]; then
+#	module unload python
+#	if [ $HPC == "KARST" ]; then
+#		module load anaconda2
+#	fi
+#	if [ $HPC == "CARBONATE" ]; then
+#		module load anaconda/python2.7/4.3.1
+#	fi	
+#fi
 
-source activate mindboggle
+#source activate mindboggle
 
 rm -rf surfaces
+rm -f finished
 
+module load singularity 2> /dev/null
 
 echo "counting files"
-NUMFILES=`$SERVICE_DIR/numfiles.py`
+NUMFILES=`./numfiles.py`
 echo "there are $NUMFILES files" 
 
 
 echo "starting main"
-python $SERVICE_DIR/main.py > stdout.log 2> stderr.log
+#python ./main.py > stdout.log 2> stderr.log
+singularity exec -e docker://lukin0110/docker-vtk-python ./main.py
 
 
 #check for output files
