@@ -5,6 +5,7 @@ import os
 import shutil
 import json
 import vtk
+from stl2gltf import stl_to_gltf
 
 with open('config.json') as config_json:
     config = json.load(config_json)
@@ -60,11 +61,27 @@ def decimate_mesh(file_name, output_name, reduction, filetype="vtk"):
       writer.SetFileName(output_name)
       writer.Write()
 
+    if filetype == "glb":
+      writer = vtk.vtkSTLWriter()
+      writer.SetInputConnection(cleaned.GetOutputPort())
+      writer.SetFileTypeToBinary()
+      writer.SetFileName(output_name)
+      writer.Write()
 
 
-filetype = config["filetype"]
-for file in glob.glob(config["surfdir"] + '/*'+filetype):
+infiletype = config["infiletype"]
+outfiletype = config["outfiletype"]
+for file in glob.glob(config["surfdir"] + '/*'+infiletype):
     print(file)
-    output_name = os.path.basename(file)[:-3]
-    output_name = output_name + filetype
-    decimate_mesh(file, 'surfaces/'+output_name, config['reduction'], filetype)
+    base_name = os.path.basename(file)[:-3]
+    if outfiletype == "glb":
+        output_name = base_name + 'stl'
+        glb_name = base_name + 'glb'
+        decimate_mesh(file, 'surfaces/'+output_name, config['reduction'], outfiletype)
+        stl_to_gltf('surfaces/'+output_name, 'surfaces/'+glb_name, True)
+        os.remove('surfaces/'+output_name)
+    else:
+        output_name = output_name + outfiletype
+        decimate_mesh(file, 'surfaces/'+output_name, config['reduction'], outfiletype)
+    
+        
