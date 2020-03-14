@@ -81,7 +81,7 @@ for file in glob.glob(config["surfdir"] + '/*'+infiletype):
         stl_to_gltf('surfaces/'+output_name, 'surfaces/'+glb_name, True)
         os.remove('surfaces/'+output_name)
     else:
-        output_name = output_name + outfiletype
+        output_name = base_name + outfiletype
         decimate_mesh(file, 'surfaces/'+output_name, config['reduction'], outfiletype)
     
         
